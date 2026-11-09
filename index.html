@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kazi Mtaani — Registration Portal</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: Georgia, 'Times New Roman', serif; }
+  html { scroll-behavior: smooth; }
+  body { background: #f5f5f0; color: #1a1a1a; }
+
+  .header { background: #101820; color: #ffffff; padding: 16px 24px; border-bottom: 4px solid #b1221b; display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 4px; }
+  .logo { font-size: 22px; font-weight: bold; letter-spacing: 1px; color: #ffffff; }
+  .logo span { color: #2d7a3a; }
+  .header-tag { font-size: 11px; color: #cccccc; font-family: Arial, Helvetica, sans-serif; }
+
+  .notice { background: #b1221b; color: #ffffff; text-align: center; padding: 10px 20px; font-size: 13px; font-family: Arial, Helvetica, sans-serif; }
+  .notice strong { letter-spacing: 1px; }
+
+  .hero { background: #ffffff; border-bottom: 1px solid #d9d9d0; padding: 40px 24px; text-align: center; }
+  .hero h1 { font-size: 26px; line-height: 1.3; color: #101820; max-width: 640px; margin: 0 auto; }
+  .hero p { margin-top: 12px; font-size: 15px; color: #333333; max-width: 560px; margin-left: auto; margin-right: auto; }
+  .hero .rate { display: inline-block; border: 1px solid #2d7a3a; color: #2d7a3a; padding: 6px 16px; margin-top: 16px; font-size: 13px; font-family: Arial, Helvetica, sans-serif; font-weight: bold; letter-spacing: 0.5px; }
+
+  .section { background: #ffffff; margin: 0 0 12px 0; border-top: 1px solid #d9d9d0; border-bottom: 1px solid #d9d9d0; padding: 28px 24px; }
+  .section-inner { max-width: 720px; margin: 0 auto; }
+  .section h2 { font-size: 16px; color: #101820; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #101820; letter-spacing: 0.5px; }
+
+  .benefits { list-style: none; }
+  .benefits li { padding: 12px 0; border-bottom: 1px solid #e8e8e0; font-size: 14px; font-family: Arial, Helvetica, sans-serif; color: #333333; }
+  .benefits li:last-child { border: none; }
+
+  .steps { counter-reset: step; }
+  .step { position: relative; padding: 0 0 18px 46px; font-size: 13px; font-family: Arial, Helvetica, sans-serif; line-height: 1.7; color: #333333; }
+  .step:last-child { padding-bottom: 0; }
+  .step::before { counter-increment: step; content: counter(step); position: absolute; left: 0; top: 0; width: 30px; height: 30px; background: #101820; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; }
+  .step::after { content: ''; position: absolute; left: 14px; top: 34px; bottom: 4px; width: 1px; background: #cccccc; }
+  .step:last-child::after { display: none; }
+
+  .stats { text-align: center; font-size: 14px; font-family: Arial, Helvetica, sans-serif; color: #2d7a3a; font-weight: bold; padding-bottom: 14px; border-bottom: 1px solid #e8e8e0; margin-bottom: 16px; }
+  .testimonial { border-left: 3px solid #2d7a3a; background: #fafaf5; padding: 12px 14px; margin-bottom: 12px; font-size: 13px; font-family: Arial, Helvetica, sans-serif; color: #333333; line-height: 1.6; }
+  .testimonial .name { display: block; text-align: right; font-weight: bold; color: #101820; margin-top: 6px; font-size: 12px; }
+
+  .form-grid { max-width: 560px; margin: 0 auto; }
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 6px; font-family: Arial, Helvetica, sans-serif; letter-spacing: 0.5px; }
+  .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid #999999; border-radius: 0; font-size: 15px; font-family: Arial, Helvetica, sans-serif; background: #ffffff; }
+  .form-group input:focus, .form-group select:focus { outline: 2px solid #2d7a3a; border-color: #2d7a3a; }
+  .btn-submit { width: 100%; background: #101820; color: #ffffff; border: none; padding: 16px; font-size: 15px; font-weight: bold; cursor: pointer; letter-spacing: 1px; font-family: Arial, Helvetica, sans-serif; transition: background 0.2s ease; }
+  .btn-submit:hover { background: #b1221b; }
+  .btn-submit:active { background: #7a1712; }
+  .form-note { font-size: 11px; color: #666666; text-align: center; margin-top: 12px; font-family: Arial, Helvetica, sans-serif; }
+  .form-note a { color: #101820; cursor: pointer; text-decoration: underline; }
+
+  .processing { display: none; position: fixed; inset: 0; background: rgba(16, 24, 32, 0.92); z-index: 50; align-items: center; justify-content: center; flex-direction: column; }
+  .processing.open { display: flex; }
+  .spinner { width: 44px; height: 44px; border: 4px solid rgba(255,255,255,0.2); border-top-color: #ffffff; border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .processing-text { color: #ffffff; font-family: Arial, Helvetica, sans-serif; font-size: 14px; margin-top: 20px; letter-spacing: 0.5px; }
+  .processing-sub { color: #cccccc; font-family: Arial, Helvetica, sans-serif; font-size: 12px; margin-top: 8px; }
+
+  #successScreen { display: none; min-height: 100vh; padding: 0; background: #f0f0ea; opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  #successScreen.visible { opacity: 1; transform: translateY(0); }
+  .success-wrap { max-width: 640px; margin: 0 auto; padding: 48px 24px 64px; }
+
+  .tracker { display: flex; margin-bottom: 24px; background: #ffffff; border: 1px solid #d9d9d0; }
+  .tracker-step { flex: 1; text-align: center; padding: 14px 6px; border-right: 1px solid #e8e8e0; position: relative; }
+  .tracker-step:last-child { border-right: none; }
+  .tracker-label { font-size: 10px; font-family: Arial, Helvetica, sans-serif; letter-spacing: 1px; color: #999999; margin-bottom: 6px; }
+  .tracker-status { font-size: 12px; font-family: Arial, Helvetica, sans-serif; font-weight: bold; }
+  .tracker-step.complete .tracker-status { color: #2d7a3a; }
+  .tracker-step.active .tracker-status { color: #b1221b; }
+  .tracker-step.active { background: #fafaf5; }
+  .tracker-step.pending .tracker-status { color: #bbbbbb; }
+
+  .success-box { background: #ffffff; border: 1px solid #d9d9d0; border-top: 5px solid #2d7a3a; padding: 36px 28px; box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+  .success-head { text-align: center; padding-bottom: 22px; border-bottom: 1px solid #e8e8e0; margin-bottom: 24px; }
+  .success-head h2 { font-size: 21px; color: #2d7a3a; letter-spacing: 1px; }
+  .success-head p { font-size: 14px; margin-top: 10px; font-family: Arial, Helvetica, sans-serif; color: #333333; line-height: 1.7; }
+  .status-badge { display: inline-block; border: 1px solid #b8860b; color: #8a6508; padding: 7px 18px; font-weight: bold; font-size: 12px; font-family: Arial, Helvetica, sans-serif; margin-top: 14px; letter-spacing: 1px; }
+
+  .detail-table { width: 100%; border-collapse: collapse; margin-bottom: 26px; font-family: Arial, Helvetica, sans-serif; }
+  .detail-table td { padding: 9px 4px; font-size: 13px; border-bottom: 1px solid #e8e8e0; }
+  .detail-table td:first-child { color: #888888; width: 45%; }
+  .detail-table td:last-child { font-weight: bold; color: #101820; }
+
+  .pay-section { border: 1px solid #101820; }
+  .pay-header { background: #101820; color: #ffffff; padding: 14px; text-align: center; }
+  .pay-header h3 { font-size: 14px; letter-spacing: 2px; }
+  .pay-body { padding: 24px; }
+  .pay-amount { text-align: center; margin-bottom: 24px; }
+  .pay-amount .label { font-size: 11px; font-family: Arial, Helvetica, sans-serif; letter-spacing: 1.5px; color: #888888; }
+  .pay-amount .amount { font-size: 40px; font-weight: bold; color: #101820; font-family: Georgia, serif; margin-top: 4px; }
+  .pay-amount .note { font-size: 11px; font-family: Arial, Helvetica, sans-serif; color: #888888; margin-top: 2px; }
+
+  .till-box { background: #fafaf5; border: 2px solid #101820; padding: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 22px; }
+  .till-info .till-label { font-size: 10px; font-family: Arial, Helvetica, sans-serif; letter-spacing: 1.5px; color: #888888; }
+  .till-info .till-number { font-size: 28px; font-weight: bold; color: #101820; letter-spacing: 2px; line-height: 1.2; }
+  .copy-btn { background: #101820; color: #ffffff; border: none; padding: 10px 18px; font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: bold; letter-spacing: 1px; cursor: pointer; transition: background 0.2s ease; white-space: nowrap; }
+  .copy-btn:hover { background: #b1221b; }
+  .copy-btn.copied { background: #2d7a3a; }
+
+  .pay-instructions { font-size: 13px; font-family: Arial, Helvetica, sans-serif; line-height: 2.1; color: #333333; }
+  .pay-instructions .instruct-title { font-size: 11px; letter-spacing: 1.5px; color: #888888; font-weight: bold; margin-bottom: 6px; }
+
+  .divider { height: 1px; background: #e8e8e0; margin: 18px 0; }
+
+  .pay-note { font-size: 12px; color: #555555; margin-top: 20px; text-align: center; font-family: Arial, Helvetica, sans-serif; font-style: italic; line-height: 1.7; }
+
+  .footer { background: #101820; color: #999999; text-align: center; padding: 24px 20px 32px; font-size: 12px; font-family: Arial, Helvetica, sans-serif; line-height: 1.8; }
+  .footer a { color: #cccccc; cursor: pointer; text-decoration: underline; }
+
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 60; align-items: center; justify-content: center; padding: 20px; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: #ffffff; border-top: 4px solid #101820; padding: 24px; max-width: 460px; width: 100%; max-height: 70vh; overflow-y: auto; }
+  .modal h3 { margin-bottom: 12px; font-size: 15px; letter-spacing: 0.5px; }
+  .modal p { font-size: 12px; color: #444444; line-height: 1.8; margin-bottom: 10px; font-family: Arial, Helvetica, sans-serif; }
+  .modal-close { background: #101820; color: #ffffff; border: none; padding: 10px 20px; margin-top: 8px; width: 100%; font-family: Arial, Helvetica, sans-serif; cursor: pointer; }
+
+  .error { color: #b1221b; font-size: 12px; margin-top: 5px; display: none; font-family: Arial, Helvetica, sans-serif; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">KAZI <span>MTAANI</span></div>
+  <div class="header-tag">Community Work Registration Portal</div>
+</div>
+
+<div class="notice">
+  <strong>PUBLIC NOTICE:</strong> Registration for the current intake cycle closes in <span id="countdown">47:59:59</span>. Slots are limited per area.
+</div>
+
+<div class="hero">
+  <h1>Daily Community Work Opportunities Available in Your Area</h1>
+  <p>Earn a daily rate of KSh 1,000–1,500 working within your own ward.</p>
+  <div class="rate">NO EXPERIENCE REQUIRED — NATIONAL ID ONLY</div>
+</div>
+
+<div class="section">
+  <div class="section-inner">
+    <h2>How It Works</h2>
+    <div class="steps">
+      <div class="step">Complete the registration form below with your personal details.</div>
+      <div class="step">Pay the one-time registration fee of KSh 200 to activate your slot.</div>
+      <div class="step">Receive an allocation to a work crew in your area and begin earning.</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-inner">
+    <h2>Benefits of Registration</h2>
+    <ul class="benefits">
+      <li>Daily rate of KSh 1,000–1,500 depending on role and location</li>
+      <li>Work allocated within your own ward — no travel required</li>
+      <li>No prior experience or qualifications needed</li>
+      <li>Weekly payments made directly to your M-Pesa account</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-inner">
+    <h2>Registration Records</h2>
+    <div class="stats"><span id="regCounter">12,438</span> registered members to date</div>
+    <div class="testimonial">"I was allocated to a roadworks crew in Nakuru within two weeks of registering. Earning KSh 1,200 daily."
+      <span class="name">— Kevin O., Nakuru</span></div>
+    <div class="testimonial">"Registration was straightforward and the fee is fair. I now work at a site near my home."
+      <span class="name">— Brian M., Nairobi</span></div>
+    <div class="testimonial">"The process was clear from the start. I recommend registering early before slots fill up."
+      <span class="name">— Amina H., Mombasa</span></div>
+  </div>
+</div>
+
+<div class="section" id="formSection">
+  <div class="section-inner">
+    <h2>Registration Form</h2>
+    <div class="form-grid">
+      <form id="regForm" novalidate>
+        <div class="form-group">
+          <label for="fullName">FULL NAME</label>
+          <input type="text" id="fullName" placeholder="e.g. Brian Mwangi" required>
+        </div>
+        <div class="form-group">
+          <label for="idNumber">NATIONAL ID NUMBER</label>
+          <input type="text" id="idNumber" placeholder="e.g. 34567890" inputmode="numeric" required>
+        </div>
+        <div class="form-group">
+          <label for="phone">PHONE NUMBER (M-PESA)</label>
+          <input type="tel" id="phone" placeholder="e.g. 0712345678" required>
+          <div class="error" id="phoneError">Enter a valid Kenyan number (07XX or 01XX format).</div>
+        </div>
+        <div class="form-group">
+          <label for="county">COUNTY</label>
+          <select id="county" required>
+            <option value="">— Select your county —</option>
+            <option>Mombasa</option><option>Kwale</option><option>Kilifi</option><option>Tana River</option>
+            <option>Lamu</option><option>Taita Taveta</option><option>Garissa</option><option>Wajir</option>
+            <option>Mandera</option><option>Marsabit</option><option>Isiolo</option><option>Meru</option>
+            <option>Tharaka Nithi</option><option>Embu</option><option>Kitui</option><option>Machakos</option>
+            <option>Makueni</option><option>Nyandarua</option><option>Nyeri</option><option>Kirinyaga</option>
+            <option>Murang'a</option><option>Kiambu</option><option>Turkana</option><option>West Pokot</option>
+            <option>Samburu</option><option>Trans Nzoia</option><option>Uasin Gishu</option><option>Elgeyo Marakwet</option>
+            <option>Nandi</option><option>Baringo</option><option>Laikipia</option><option>Nakuru</option>
+            <option>Narok</option><option>Kajiado</option><option>Kericho</option><option>Bomet</option>
+            <option>Kakamega</option><option>Vihiga</option><option>Bungoma</option><option>Busia</option>
+            <option>Siaya</option><option>Kisumu</option><option>Homa Bay</option><option>Migori</option>
+            <option>Kisii</option><option>Nyamira</option><option>Nairobi</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="ward">WARD / SUB-COUNTY</label>
+          <input type="text" id="ward" placeholder="e.g. Kilimani" required>
+        </div>
+        <button type="submit" class="btn-submit" id="submitBtn">SUBMIT REGISTRATION</button>
+        <p class="form-note">By submitting this form you agree to our <a onclick="openTerms()">Terms and Conditions</a>.</p>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div id="successScreen">
+  <div class="success-wrap">
+    <div class="tracker">
+      <div class="tracker-step complete">
+        <div class="tracker-label">STEP 1</div>
+        <div class="tracker-status">REGISTRATION — DONE</div>
+      </div>
+      <div class="tracker-step active">
+        <div class="tracker-label">STEP 2</div>
+        <div class="tracker-status">ACTIVATION — IN PROGRESS</div>
+      </div>
+      <div class="tracker-step pending">
+        <div class="tracker-label">STEP 3</div>
+        <div class="tracker-status">ALLOCATION — PENDING</div>
+      </div>
+    </div>
+
+    <div class="success-box">
+      <div class="success-head">
+        <h2>REGISTRATION RECEIVED</h2>
+        <p>Thank you, <b id="firstName">Member</b>. Your details have been recorded and verified.</p>
+        <div class="status-badge">STATUS: PENDING ACTIVATION</div>
+      </div>
+
+      <table class="detail-table">
+        <tr><td>Registration ID</td><td id="regId">KM-2025-0000</td></tr>
+        <tr><td>Full Name</td><td id="detailName">—</td></tr>
+        <tr><td>Phone Number</td><td id="detailPhone">—</td></tr>
+        <tr><td>County</td><td id="detailCounty">—</td></tr>
+      </table>
+
+      <div class="pay-section">
+        <div class="pay-header">
+          <h3>ACTIVATE YOUR REGISTRATION SLOT</h3>
+        </div>
+        <div class="pay-body">
+          <div class="pay-amount">
+            <div class="label">ONE-TIME REGISTRATION FEE</div>
+            <div class="amount">KSh 200</div>
+            <div class="note">Payable once — no other charges</div>
+          </div>
+
+          <div class="till-box" id="tillBox">
+            <div class="till-info">
+              <div class="till-label">M-PESA TILL NUMBER</div>
+              <div class="till-number">4222720</div>
+            </div>
+            <button class="copy-btn" id="copyBtn" onclick="copyTill()">COPY</button>
+          </div>
+
+          <div class="pay-instructions">
+            <div class="instruct-title">HOW TO PAY</div>
+            1. Open M-Pesa on your phone<br>
+            2. Select Lipa na M-Pesa<br>
+            3. Select Buy Goods and Services<br>
+            4. Enter Till Number: <b>4222720</b><br>
+            5. Enter Amount: <b>KSh 200</b> and confirm with your M-Pesa PIN
+          </div>
+
+          <div class="divider"></div>
+
+          <p class="pay-note">Your activation will be confirmed within 24 hours via SMS to your registered number. Keep your Registration ID for reference.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="processing" id="processingScreen">
+  <div class="spinner"></div>
+  <div class="processing-text" id="processingText">Submitting your registration...</div>
+  <div class="processing-sub" id="processingSub">Please do not close this page.</div>
+</div>
+
+<div class="footer">
+  &copy; 2025 Kazi Mtaani — Connecting Youth to Work<br>
+  <a onclick="openTerms()">Terms and Conditions</a>
+</div>
+
+<div class="modal-overlay" id="termsModal">
+  <div class="modal">
+    <h3>Terms and Conditions</h3>
+    <p>1. The registration fee of KSh 200 is a one-time fee and is non-refundable once processing has begun.</p>
+    <p>2. Placement in a work crew is subject to the availability of slots in the applicant's area. Registration does not guarantee immediate placement.</p>
+    <p>3. Daily rates range from KSh 1,000 to KSh 1,500 depending on the role and location of assignment.</p>
+    <p>4. Payments are made weekly via M-Pesa to the registered phone number.</p>
+    <p>5. Applicants must be 18 years of age or older and hold a valid National Identity Card.</p>
+    <button class="modal-close" onclick="closeTerms()">CLOSE</button>
+  </div>
+</div>
+
+<script>
+  let totalSeconds = 47 * 3600 + 59 * 60 + 59;
+  const timerEl = document.getElementById('countdown');
+  setInterval(function() {
+    if (totalSeconds > 0) totalSeconds--;
+    const h = Math.floor(totalSeconds / 3600);
+    const m = Math.floor((totalSeconds % 3600) / 60);
+    const s = totalSeconds % 60;
+    timerEl.textContent = String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+  }, 1000);
+
+  let count = 12438;
+  const counterEl = document.getElementById('regCounter');
+  setInterval(function() {
+    count++;
+    counterEl.textContent = count.toLocaleString();
+  }, 25000);
+
+  function openTerms() { document.getElementById('termsModal').classList.add('open'); }
+  function closeTerms() { document.getElementById('termsModal').classList.remove('open'); }
+  document.getElementById('termsModal').addEventListener('click', function(e) {
+    if (e.target === this) closeTerms();
+  });
+
+  function copyTill() {
+    const btn = document.getElementById('copyBtn');
+    const fallback = function() {
+      const input = document.createElement('input');
+      input.value = '4222720';
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText('4222720').then(function() {
+        btn.textContent = 'COPIED';
+        btn.classList.add('copied');
+        setTimeout(function() { btn.textContent = 'COPY'; btn.classList.remove('copied'); }, 2000);
+      }).catch(fallback);
+    } else {
+      fallback();
+      btn.textContent = 'COPIED';
+      btn.classList.add('copied');
+      setTimeout(function() { btn.textContent = 'COPY'; btn.classList.remove('copied'); }, 2000);
+    }
+  }
+
+  document.getElementById('regForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const submitBtn = document.getElementById('submitBtn');
+    if (submitBtn.disabled) return;
+
+    const phone = document.getElementById('phone').value.replace(/\s/g, '');
+    const validPhone = /^(07|01)\d{8}$/.test(phone);
+    const phoneError = document.getElementById('phoneError');
+
+    if (!validPhone) {
+      phoneError.style.display = 'block';
+      document.getElementById('phone').focus();
+      return;
+    }
+    phoneError.style.display = 'none';
+
+    const data = {
+      fullName: document.getElementById('fullName').value,
+      idNumber: document.getElementById('idNumber').value,
+      phone: phone,
+      county: document.getElementById('county').value,
+      ward: document.getElementById('ward').value,
+      timestamp: new Date().toISOString()
+    };
+    console.log('New registration:', data);
+
+    const regId = 'KM-2025-' + String(Math.floor(1000 + Math.random() * 9000));
+
+    const stages = [
+      { text: 'Submitting your registration...', sub: 'Please do not close this page.' },
+      { text: 'Verifying National ID details...', sub: 'Cross-checking with registration records.' },
+      { text: 'Confirming slot availability in ' + data.county + ' County...', sub: 'This will only take a moment.' },
+      { text: 'Finalizing your registration...', sub: 'Almost done.' }
+    ];
+
+    const overlay = document.getElementById('processingScreen');
+    const textEl = document.getElementById('processingText');
+    const subEl = document.getElementById('processingSub');
+
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = '0.6';
+    overlay.classList.add('open');
+
+    let stageIndex = 0;
+    textEl.textContent = stages[0].text;
+    subEl.textContent = stages[0].sub;
+
+    const stageInterval = setInterval(function() {
+      stageIndex++;
+      if (stageIndex < stages.length) {
+        textEl.textContent = stages[stageIndex].text;
+        subEl.textContent = stages[stageIndex].sub;
+      }
+    }, 1100);
+
+    setTimeout(function() {
+      clearInterval(stageInterval);
+      overlay.classList.remove('open');
+
+      const firstName = data.fullName.trim().split(' ')[0];
+      document.getElementById('firstName').textContent = firstName;
+      document.getElementById('regId').textContent = regId;
+      document.getElementById('detailName').textContent = data.fullName;
+      document.getElementById('detailPhone').textContent = data.phone;
+      document.getElementById('detailCounty').textContent = data.county + ' — ' + data.ward;
+
+      document.querySelectorAll('.section, .hero').forEach(function(el) {
+        el.style.display = 'none';
+      });
+      document.querySelector('.notice').style.display = 'none';
+
+      const successScreen = document.getElementById('successScreen');
+      successScreen.style.display = 'block';
+      window.scrollTo(0, 0);
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          successScreen.classList.add('visible');
+        });
+      });
+
+      submitBtn.disabled = false;
+      submitBtn.style.opacity = '1';
+    }, 4800);
+  });
+</script>
+
+</body>
+</html>
